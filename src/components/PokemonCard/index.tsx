@@ -7,12 +7,10 @@ type Props = {
 export function PokemonCard(props: Props) {
   const { pokemon } = props;
 
-  let gradient = ""
   let bgColor =""
 
   if (pokemon.types[0].type.name === "grass") {
     bgColor = "rgba(139,190,138,1)"
-    gradient = "linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(139,190,138,1) 0%, rgba(204,204,204,1) 76%, rgba(255,255,255,1) 100%);"
   } else if (pokemon.types[0].type.name === "fire") {
     bgColor = "#FFA756";
   } else if (pokemon.types[0].type.name === "water") {

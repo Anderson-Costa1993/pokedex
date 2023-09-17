@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { PokemonPaginationItem, Pokemon, PokemonEvolution } from "../types";
+import type { PokemonPaginationItem, Pokemon } from "../types";
 
 const API_URL = "https://pokeapi.co/api/v2/pokemon";
 
@@ -42,7 +42,7 @@ export const pokemonApiService = {
   },
 
   getEvolutionByName: async (name: string) => {
-    const response = await http.get<PokemonEvolution>(name);
+    const response = await http.get<Pokemon>(name);
     return response.data
   },
 

@@ -1,0 +1,35 @@
+.figure {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.imgpokemon {
+  width: 150px;
+  height: 180px;
+  position: relative;
+}
+
+.name {
+  text-align: center;
+  margin: 10px;
+  text-transform: capitalize;
+  font-weight: 900;
+  margin: 0;
+  padding: 15px 0;
+  color: #000000d3;
+}
+
+.svg-icon {
+  position: absolute;
+  height: 180px;
+  width: 150px;
+  margin: 0 auto;
+  left: 43%;
+  opacity: 0.2;
+}
+
+.background-icon {
+  background: rgb(47,47,47);
+background: linear-gradient(184deg, rgba(47,47,47,1) 0%, rgba(125,125,125,1) 0%, rgba(163,163,163,1) 76%, rgba(255,255,255,1) 100%);
+}

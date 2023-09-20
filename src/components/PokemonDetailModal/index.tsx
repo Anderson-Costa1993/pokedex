@@ -1,15 +1,75 @@
 import { Pokemon } from "../../types";
 import { GuiaModal } from "../GuiaModal/GuiaModal";
 import styles from "./modal.module.css";
+import { useState, useEffect } from "react";
+import { pokemonApiService } from "../../services/pokemonApiService";
+import { nameEvolution } from "../../types";
 
 type Props = {
   pokemon: Pokemon;
-  pokemonEvolutionDetails: Pokemon[],
   setPokemonActive:  React.Dispatch<React.SetStateAction<Pokemon | undefined>>;
   onClose: () => void;
 };
 
-export function PokemonDetailModal({ pokemon, onClose, pokemonEvolutionDetails, setPokemonActive }: Props) {
+export function PokemonDetailModal({ pokemon, onClose, setPokemonActive }: Props) {
+
+  const [pokemonSpecie, setPokemonSpecie] = useState<Pokemon>();
+  const [pokemonEvolution, setPokemonEvolution] = useState<Pokemon>();
+  const [pokemonNameEvolution, setPokemonNameEvolution] = useState<
+    nameEvolution[]
+  >([]);
+  const [pokemonEvolutionDetails, setPokemonEvolutionDetails] = useState<
+    Pokemon[]
+  >([]);
+
+
+  useEffect(() => {
+    const newPokemonNames: nameEvolution[] = [];
+    if (pokemonEvolution) {
+      newPokemonNames.push({ name: pokemonEvolution?.chain.species.name });
+    }
+    pokemonEvolution?.chain.evolves_to.map((pokemon) => {
+      newPokemonNames.push({ name: pokemon?.species?.name });
+    });
+    pokemonEvolution?.chain.evolves_to.map((pokemon) => {
+      pokemon.evolves_to.map((pokemon) => {
+        newPokemonNames.push({ name: pokemon?.species?.name });
+      });
+    });
+    setPokemonNameEvolution(newPokemonNames);
+  }, [pokemonEvolution]);
+
+
+  useEffect(() => {
+    if (pokemon) {
+      pokemonApiService.getSpeciesById(pokemon?.id).then((res) => {
+        setPokemonSpecie(res);
+      });
+    }
+  }, [pokemon]);
+
+  useEffect(() => {
+    if (pokemonSpecie?.evolution_chain.url) {
+      pokemonApiService
+        .getPokemonByUrl(pokemonSpecie?.evolution_chain.url)
+        .then((res) => {
+          setPokemonEvolution(res);
+        });
+    }
+  }, [pokemonSpecie]);
+
+  useEffect(() => {
+    if (pokemonNameEvolution && pokemon) {
+      Promise.all(
+        pokemonNameEvolution.map((pokemon) =>
+          pokemonApiService.getEvolutionByName(pokemon.name)
+        )
+      ).then((res) => {
+        setPokemonEvolutionDetails(res);
+      });
+    }
+  }, [pokemonNameEvolution]);
+
 
   let bgColor =""
   if (pokemon.types[0].type.name === "grass") {
@@ -33,7 +93,7 @@ export function PokemonDetailModal({ pokemon, onClose, pokemonEvolutionDetails, 
   return (
     <div className="modal is-active">
       <div className="modal-background" />
-      <div className="modal-content" style={{ maxWidth: "70%", width:"500px", border:"outset 1px", borderColor: bgColor}}>
+      <div className="modal-content" style={{ maxWidth: "80%", width:"500px", border:"outset 1px", borderColor: bgColor}}>
         <div className="mb-0" style={{ background: bgColor}}>
           <div className={styles['svg-icon']}>
             <svg width="180" height="190" viewBox="0 0 80 70">

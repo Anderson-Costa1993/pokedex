@@ -5,8 +5,8 @@
   justify-content: center;
 }
 .imgpokemon {
-  width: 150px;
-  height: 180px;
+  width: 120px;
+  height: 150px;
   position: relative;
 }
 
@@ -17,7 +17,8 @@
   font-weight: 900;
   margin: 0;
   padding: 15px 0;
-  color: #000000d3;
+  color: #00000096;
+  font-size: 20px;
 }
 
 .svg-icon {

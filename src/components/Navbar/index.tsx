@@ -1,6 +1,13 @@
+import React from "react";
 
+type Props = {
+  filtroBusca: string;
+  setFiltroBusca: React.Dispatch<React.SetStateAction<string>>
+};
+export function Navbar({filtroBusca, setFiltroBusca }: Props) {
 
-export function Navbar() {
+  const valorDaBusca = filtroBusca
+  const SetValorDaBusca = setFiltroBusca
 
   return (
     <header>
@@ -26,6 +33,8 @@ export function Navbar() {
             <input
               className="input"
               type="text"
+              onChange={(e) => SetValorDaBusca(e.target.value)}
+              value={valorDaBusca}
               placeholder="Find a repository"
               style={{width: "150px"}}
             />

@@ -1,0 +1,38 @@
+.contain-card {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  margin: 0 auto;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  height: 220px;
+  box-sizing: border-box;
+  overflow: hidden;
+  padding: 0 1em;
+}
+
+.name-pokemon {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.card-content {
+  padding: 0;
+  margin-top: 30px;
+}
+.card-image {
+  height: 100px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 50px;
+}
+
+.figure {
+  margin: 0 auto;
+}
+.id-pokemon {
+  font-size: 12px;
+}

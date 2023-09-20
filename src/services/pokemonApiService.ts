@@ -13,6 +13,12 @@ type PageOptions = {
 };
 
 export const pokemonApiService = {
+
+  getAllsPokemons: async () => {
+    const response = await http.get<Pokemon>("?limit=100000&offset=0.");
+    return response.data
+  },
+
   getPokemons: async (options?: PageOptions) => {
     const limit = options?.limit || 20;
     const page = options?.page || 1;

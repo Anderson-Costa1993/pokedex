@@ -1,54 +1,30 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { pokemonApiService } from "./services/pokemonApiService";
-import type { Pokemon, PokemonPaginationItem, nameEvolution } from "./types";
+import type { Pokemon, PokemonPaginationItem } from "./types";
 import { PokemonCard } from "./components/PokemonCard";
 import { PokemonDetailModal } from "./components/PokemonDetailModal";
-import { Navbar } from "./Navbar";
+import { Navbar } from "./components/Navbar";
 // import "./App.css";
-
 
 function App() {
   const [pokemons, setPokemons] = useState<PokemonPaginationItem[]>([]);
   const [pokemonsDetails, setPokemonsDetails] = useState<Pokemon[]>([]);
   const [page, setPage] = useState(1);
   const [pokemonActive, setPokemonActive] = useState<Pokemon>();
-  const [pokemonSpecie, setPokemonSpecie] = useState<Pokemon>()
-  const [pokemonEvolution, setPokemonEvolution] = useState<Pokemon>();
-  const [pokemonNameEvolution, setPokemonNameEvolution] = useState<nameEvolution[]>([])
-  const [pokemonEvolutionDetails, setPokemonEvolutionDetails] = useState<Pokemon[]>([]);
-
-  useEffect ( ()=> {
-    const newPokemonNames: nameEvolution[] = [];
-        if(pokemonEvolution) {
-        newPokemonNames.push(
-          {name: pokemonEvolution?.chain.species.name},
-        )
-        }
-        pokemonEvolution?.chain.evolves_to.map( (pokemon) => {
-            newPokemonNames.push (
-              {name: pokemon?.species?.name}
-            )
-        })
-      pokemonEvolution?.chain.evolves_to.map( (pokemon) => {
-        pokemon.evolves_to.map( pokemon => {
-          newPokemonNames.push (
-            {name: pokemon?.species?.name}
-          )
-      })})
-      setPokemonNameEvolution(newPokemonNames)
-  },[pokemonEvolution])
+  const [filtroBusca, setFiltroBusca] = useState("");
 
   useEffect(() => {
     pokemonApiService
       .getPokemons({
-        limit: 10,
+        limit: 20,
         page,
       })
       .then((res) => {
         setPokemons(res);
       });
   }, [page]);
+
 
   useEffect(() => {
     Promise.all(
@@ -62,55 +38,37 @@ function App() {
     });
   }, [pokemons]);
 
-  useEffect(() => {
-    if (pokemonActive) {
-    (
-        pokemonApiService.getSpeciesById(pokemonActive?.id)
-    ).then((res) => {
-      setPokemonSpecie(res)
-    });
-  }}, [pokemonActive]);
-
-
-  useEffect(() => {
-    if (pokemonSpecie?.evolution_chain.url) {
-    (
-        pokemonApiService.getPokemonByUrl(pokemonSpecie?.evolution_chain.url)
-    ).then((res) => {
-      setPokemonEvolution(res)
-    });
-  }}, [pokemonSpecie]);
-
-useEffect(() => {
-  if (pokemonNameEvolution && pokemonActive) {
-    Promise.all
-    (pokemonNameEvolution.map( (pokemon) => pokemonApiService.getEvolutionByName(pokemon.name))
-    ).then( (res) => {
-      setPokemonEvolutionDetails(res)
-    })
-  }
-}, [pokemonNameEvolution])
-
   return (
     <>
-    <Navbar />
+      <Navbar filtroBusca={filtroBusca} setFiltroBusca={setFiltroBusca} />
       <main className="container" style={{ marginTop: "30px" }}>
         <div className="columns is-multiline">
-          {pokemonsDetails.map((pokemon) => {
-            return (
-              <div
-                key={pokemon.id}
-                className="column is-3"
-                onClick={() => setPokemonActive(pokemon)}
-              >
-                <PokemonCard pokemon={pokemon} />
-              </div>
-            );
-          })}
+          {pokemonsDetails
+            .filter((pokemon) =>
+              pokemon.name
+                .toLocaleLowerCase()
+                .includes(filtroBusca.toLocaleLowerCase())
+            )
+            .map((pokemon) => {
+              return (
+                <div
+                  key={pokemon.id}
+                  className="column is-3"
+                  onClick={() => setPokemonActive(pokemon)}
+                >
+                  <PokemonCard pokemon={pokemon} />
+                </div>
+              );
+            })}
         </div>
 
         <nav
-          style={{width: "100%", alignItems:"center", display: "flex", justifyContent: "center"}}
+          style={{
+            width: "100%",
+            alignItems: "center",
+            display: "flex",
+            justifyContent: "center",
+          }}
           role="navigation"
           aria-label="pagination"
         >
@@ -134,7 +92,6 @@ useEffect(() => {
         {pokemonActive &&
           createPortal(
             <PokemonDetailModal
-              pokemonEvolutionDetails={pokemonEvolutionDetails}
               pokemon={pokemonActive}
               onClose={() => setPokemonActive(undefined)}
               setPokemonActive={setPokemonActive}

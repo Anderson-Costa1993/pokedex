@@ -21,15 +21,14 @@ export function GuiaModal({
 
   return (
     <div
-      className="tabs is-centered is-toggle is-flex-direction-column"
+      className={styles['nav-list']}
       style={{ background: "#fff" }}
     >
       <>
-        <ul>
-          <li style={{ fontWeight: "bold" }}>
+        <ul className={styles['nav-ul']}>
+          <li>
             <a
-              className={styles.listA}
-              style={{ border: "none" }}
+              className={styles['nav-ul-li-a']}
               onClick={() => handleTabClick("About")}
             >
               About
@@ -37,8 +36,7 @@ export function GuiaModal({
           </li>
           <li>
             <a
-              className={styles.listA}
-              style={{ border: "none" }}
+              className={styles['nav-ul-li-a']}
               onClick={() => handleTabClick("Base states")}
             >
               Base states
@@ -46,8 +44,7 @@ export function GuiaModal({
           </li>
           <li>
             <a
-              className={styles.listA}
-              style={{ border: "none" }}
+              className={styles['nav-ul-li-a']}
               onClick={() => handleTabClick("Evolutions")}
             >
               Evolutions
@@ -58,18 +55,16 @@ export function GuiaModal({
 
       {activeTab === "About" ? (
         <div
-          className="box"
-          style={{ height: "200px", textAlign: "center", width: "100%" }}
+          className={styles['contain-about']}
         >
           <section
-            className="is-flex is-flex-direction-column"
-            style={{ fontWeight: "bold" }}
+            className={styles['section-about']}
           >
-            <span>Height: {pokemon.height}</span>
-            <span>weight: {pokemon.weight}</span>
+            <span>Height: {pokemon.height/10 + " m"}</span>
+            <span>weight: {pokemon.weight/10 + " Kg"}</span>
             <span>Base Experience: {pokemon.base_experience}</span>
             {pokemon.abilities.map((pokemonAbilities) => (
-              <span key={pokemonAbilities.ability.name} className="">
+              <span key={pokemonAbilities.ability.name} className={styles['states-ability']}>
                 Ability: {pokemonAbilities.ability.name}
               </span>
             ))}
@@ -78,7 +73,7 @@ export function GuiaModal({
       ) : null}
 
       {activeTab === "Base states" ? (
-        <div className="box" style={{ height: "200px" }}>
+        <div className={styles['contain-base-states']} style={{ height: "200px" }}>
           <section className="is-flex is-flex-direction-column">
             {pokemon.stats.map((pokemonStates) => (
               <div
@@ -102,7 +97,7 @@ export function GuiaModal({
                     key={pokemonStates.stat.name}
                     className="progress is-primary is-small"
                     value={pokemonStates.base_stat}
-                    max="100"
+                    max="200"
                   ></progress>
                 </div>
               </div>

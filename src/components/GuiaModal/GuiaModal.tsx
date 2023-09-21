@@ -5,13 +5,15 @@ import styles from "./contaiLevel.module.css";
 type Props = {
   pokemon: Pokemon;
   pokemonEvolutionDetails: Pokemon[];
-  setPokemonActive:  React.Dispatch<React.SetStateAction<Pokemon | undefined>>;
+  setPokemonActive: React.Dispatch<React.SetStateAction<Pokemon | undefined>>;
+  scrollToTop: () => void;
 };
 
 export function GuiaModal({
   pokemon,
   pokemonEvolutionDetails,
   setPokemonActive,
+  scrollToTop,
 }: Props) {
   const [activeTab, setActiveTab] = useState("About");
 
@@ -20,15 +22,12 @@ export function GuiaModal({
   };
 
   return (
-    <div
-      className={styles['nav-list']}
-      style={{ background: "#fff" }}
-    >
+    <div className={styles["nav-list"]} style={{ background: "#fff" }}>
       <>
-        <ul className={styles['nav-ul']}>
+        <ul className={styles["nav-ul"]}>
           <li>
             <a
-              className={styles['nav-ul-li-a']}
+              className={styles["nav-ul-li-a"]}
               onClick={() => handleTabClick("About")}
             >
               About
@@ -36,7 +35,7 @@ export function GuiaModal({
           </li>
           <li>
             <a
-              className={styles['nav-ul-li-a']}
+              className={styles["nav-ul-li-a"]}
               onClick={() => handleTabClick("Base states")}
             >
               Base states
@@ -44,7 +43,7 @@ export function GuiaModal({
           </li>
           <li>
             <a
-              className={styles['nav-ul-li-a']}
+              className={styles["nav-ul-li-a"]}
               onClick={() => handleTabClick("Evolutions")}
             >
               Evolutions
@@ -54,17 +53,16 @@ export function GuiaModal({
       </>
 
       {activeTab === "About" ? (
-        <div
-          className={styles['contain-about']}
-        >
-          <section
-            className={styles['section-about']}
-          >
-            <span>Height: {pokemon.height/10 + " m"}</span>
-            <span>weight: {pokemon.weight/10 + " Kg"}</span>
+        <div className={styles["contain-about"]}>
+          <section className={styles["section-about"]}>
+            <span>Height: {pokemon.height / 10 + " m"}</span>
+            <span>weight: {pokemon.weight / 10 + " Kg"}</span>
             <span>Base Experience: {pokemon.base_experience}</span>
             {pokemon.abilities.map((pokemonAbilities) => (
-              <span key={pokemonAbilities.ability.name} className={styles['states-ability']}>
+              <span
+                key={pokemonAbilities.ability.name}
+                className={styles["states-ability"]}
+              >
                 Ability: {pokemonAbilities.ability.name}
               </span>
             ))}
@@ -73,7 +71,10 @@ export function GuiaModal({
       ) : null}
 
       {activeTab === "Base states" ? (
-        <div className={styles['contain-base-states']} style={{ height: "200px" }}>
+        <div
+          className={styles["contain-base-states"]}
+          style={{ height: "200px" }}
+        >
           <section className="is-flex is-flex-direction-column">
             {pokemon.stats.map((pokemonStates) => (
               <div
@@ -107,39 +108,62 @@ export function GuiaModal({
       ) : null}
 
       {activeTab === "Evolutions" ? (
-        <div className={styles['box-evolutiuon']}>
-          <section className={styles['section-evolution']}
-          >
+        <div className={styles["box-evolutiuon"]}>
+          <section className={styles["section-evolution"]}>
             {pokemonEvolutionDetails.map((pokemon) => (
-              <div
-                className={styles['pokemon-evolution']}
-                key={pokemon.id}
-              >
+              <div className={styles["pokemon-evolution"]} key={pokemon.id}>
                 {pokemon.sprites.other.dream_world.front_default ? (
-                  <div className={styles['box-image-evolution']} >
-                  <img
-                  className={styles['image-evolution']}
-                  src={pokemon.sprites.other["official-artwork"].front_default}
-                  alt=""
-                  onClick={()=> setPokemonActive(pokemon)}
-                />
-                </div>
+                  <div className={styles["box-image-evolution"]}>
+                    <img
+                      className={styles["image-evolution"]}
+                      src={
+                        pokemon.sprites.other["official-artwork"].front_default
+                      }
+                      alt=""
+                      onClick={() => {
+                        setPokemonActive(pokemon);
+                        scrollToTop();
+                      }}
+                    />
+                  </div>
                 ) : (
-                  <div className={styles['box-image-evolution']}>
-                  <img
-                  className={styles['image-evolution']}
-                  src={pokemon.sprites.other["official-artwork"].front_default}
-                  alt=""
-                  onClick={()=> setPokemonActive(pokemon)}
-                />
-                </div>
+                  <div className={styles["box-image-evolution"]}>
+                    <img
+                      className={styles["image-evolution"]}
+                      src={
+                        pokemon.sprites.other["official-artwork"].front_default
+                      }
+                      alt=""
+                      onClick={() => {
+                        setPokemonActive(pokemon);
+                      }}
+                    />
+                  </div>
                 )}
-                <span className={styles['pokemon-evolution-name']}>{pokemon.name}</span>
-                <div className={styles['box-type-evolution']}>
+                <span className={styles["pokemon-evolution-name"]}>
+                  {pokemon.name}
+                </span>
+                <div className={styles["box-type-evolution"]}>
                   {pokemon.types.map((type) => (
-                  <span className={styles['name-types']} key={type.type.name} > {type.type.name} </span>
-                ))}
+                    <span className={styles["name-types"]} key={type.type.name}>
+                      {" "}
+                      {type.type.name}{" "}
+                    </span>
+                  ))}
                 </div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="50"
+                  height="50"
+                  fill="currentColor"
+                  className="bi bi-chevron-compact-down"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M1.553 6.776a.5.5 0 0 1 .67-.223L8 9.44l5.776-2.888a.5.5 0 1 1 .448.894l-6 3a.5.5 0 0 1-.448 0l-6-3a.5.5 0 0 1-.223-.67z"
+                  />
+                </svg>
               </div>
             ))}
           </section>

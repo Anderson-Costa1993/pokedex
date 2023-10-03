@@ -123,6 +123,7 @@ export function GuiaModal({
                       onClick={() => {
                         setPokemonActive(pokemon);
                         scrollToTop();
+                        handleTabClick("About")
                       }}
                     />
                   </div>
@@ -136,6 +137,8 @@ export function GuiaModal({
                       alt=""
                       onClick={() => {
                         setPokemonActive(pokemon);
+                        scrollToTop();
+                        handleTabClick("About")
                       }}
                     />
                   </div>
